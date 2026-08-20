@@ -249,6 +249,10 @@ Aplica de forma breve y explícita esta secuencia:
 - **Comprender:** formula qué podría estar viviendo o necesitando la otra persona, como posibilidad.
 - **Expresar:** nombra en primera persona el impacto, emoción o necesidad propia, sin acusar.
 - **Pedir:** propone una petición concreta, posible y libre de presión; no una exigencia.
+- **Revisar mi parte (Naikan):** mira con hechos concretos qué he recibido de esta persona o situación,
+  qué he ofrecido yo y qué dificultad podría haber contribuido a causar. Hazlo sin culpa ni
+  autoacusación; reconocer la propia parte no elimina la responsabilidad de la otra persona ni obliga
+  a tolerar una conducta dañina.
 ## 🧭 ELIGE
 Elige una sola acción entre: escuchar, aclarar, expresar, negociar, poner un límite, detenerse o
 reparar. Explica en una frase por qué esa es la necesidad de la interacción ahora.
@@ -305,17 +309,17 @@ Explica en una frase qué avance pequeño y realista se busca.
 ## 3. Proponer un siguiente paso
 **Tú:** una propuesta concreta, libre de presión, o un límite respetuoso si corresponde.
 **La otra persona podría responder:** una réplica verosímil.
-## 4. Simplificar para avanzar — principios de diseño de Maeda
+## 4. Simplificar para avanzar
 **Tú:** reduce el asunto a una sola cuestión importante, organiza lo esencial y formula una pregunta
 o propuesta sencilla. Evita añadir detalles, reproches o soluciones múltiples; la simplicidad debe
 dar claridad, no ocultar lo importante.
 **La otra persona podría responder:** una réplica verosímil.
-## 5. Conectar desde la persona — psicología humanista de Rogers
+## 5. Conectar desde la persona
 **Tú:** muestra empatía, congruencia y respeto incondicional por la persona sin aprobar una conducta
 dañina. Nombra de manera prudente lo que parece importante para ella y expresa tu posición con
 autenticidad.
 **La otra persona podría responder:** una réplica verosímil.
-## 6. Desescalar antes de resolver — Doug Noll
+## 6. Desescalar antes de resolver
 **Tú:** si hay intensidad, deja de discutir el contenido por un momento y refleja la emoción posible
 en una frase breve de segunda persona, sin diagnosticar ni decir que sabes lo que siente (por ejemplo:
 «Parece que esto te ha hecho sentir muy frustrado»). Después ofrece una pausa o una pregunta que
