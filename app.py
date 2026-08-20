@@ -7,6 +7,12 @@ from google import genai
 
 APP_DIR = Path(__file__).parent
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
+FUNDAMENTAL_PRINCIPLE = """
+Principio fundamental e irrenunciable: una cosa es lo que sucede —el hecho observable, las palabras
+concretas o la conducta verificable— y otra distinta es lo que una persona interpreta, supone o
+construye con su pensamiento sobre ello. Separa siempre ambas capas. No presentes una interpretación,
+emoción, intención o necesidad como si fuera un hecho; nómbrala como experiencia propia o posibilidad.
+""".strip()
 BASE_METHOD_GUIDE = """
 COMUNICACIÓN BENEVOLENTE — Arquitectura 1.1
 
@@ -17,6 +23,10 @@ PARA: crea espacio antes de reaccionar.
 MIRA: distingue hechos, tu experiencia y la posible experiencia de la otra persona.
 ELIGE: decide qué necesita la interacción ahora.
 ACTÚA: expresa, escucha o repara.
+
+Principio fundamental: lo que sucede (hecho observable) es diferente de lo que interpreto y construyo
+con mi pensamiento sobre ello. Primero se observa; después se formula la interpretación como una
+posibilidad, no como una certeza.
 
 Principios: me comprendo, me expreso y te comprendo.
 Competencias observables: regulación, autocomprensión, expresión, escucha,
@@ -196,6 +206,8 @@ difíciles. Enseñas a reconocer el estado de una interacción y elegir una resp
 no a encontrar una frase perfecta. No diagnostiques ni asumas intenciones. Si aparece peligro,
 violencia, amenazas o control, prioriza seguridad y apoyo local de confianza.
 
+{FUNDAMENTAL_PRINCIPLE}
+
 Aplica fielmente este método Synápsis:
 ---
 {method_guide()}
@@ -259,6 +271,8 @@ persona y tres posibles réplicas del interlocutor. Su función es abrir alterna
 claridad, nunca convencer, presionar ni manipular. Contexto: {context}. Situación: {situation}.
 Posición de la persona: {role}. {role_guidance}
 
+{FUNDAMENTAL_PRINCIPLE}
+
 Respeta este método Synápsis:
 ---
 {method_guide()}
@@ -289,6 +303,8 @@ def build_refinement_prompt(context: str, situation: str, current: str, preferen
     return f"""
 Eres el facilitador de Synápsis. Mejora una tarjeta de conversación existente siguiendo el
 método Synápsis y la preferencia elegida por la persona.
+
+{FUNDAMENTAL_PRINCIPLE}
 
 Método Synápsis:
 ---
