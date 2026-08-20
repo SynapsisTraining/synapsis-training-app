@@ -7,6 +7,14 @@ from google import genai
 
 APP_DIR = Path(__file__).parent
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
+BASE_METHOD_GUIDE = """
+1. Diferencia los hechos observables de las interpretaciones.
+2. Nombra la emoción como una posibilidad, nunca como un diagnóstico.
+3. Expresa la necesidad sin culpabilizar a la otra persona.
+4. Formula una petición concreta, realista y que deje libertad de respuesta.
+5. Prioriza claridad, respeto, reciprocidad y límites sanos.
+6. Evita etiquetas, amenazas, generalizaciones y consejos moralizantes.
+""".strip()
 
 st.set_page_config(
     page_title="Synápsis Training | Ensaya antes de decirlo",
@@ -71,11 +79,17 @@ def ask_gemini(instruction: str) -> str:
 def set_defaults() -> None:
     for key, value in {
         "analysis": None,
+        "refined_analysis": None,
         "practice": None,
         "last_context": None,
         "last_situation": None,
     }.items():
         st.session_state.setdefault(key, value)
+
+
+def method_guide() -> str:
+    """Permite personalizar el método sin modificar el código de la app."""
+    return secret_or_env("SYNAPSIS_METHOD_GUIDE", BASE_METHOD_GUIDE)
 
 
 def show_brand() -> None:
@@ -92,6 +106,11 @@ Eres el facilitador de Synápsis, una herramienta educativa para preparar conver
 Tu trabajo es ayudar a comunicarse con claridad, respeto y límites sanos. No diagnostiques,
 no asumas intenciones ni sustituyas apoyo profesional. Si el relato indica peligro, violencia,
 amenazas o control, prioriza seguridad y recomienda pedir ayuda local de confianza.
+
+Aplica fielmente este método Synápsis:
+---
+{method_guide()}
+---
 
 Entorno: {context}
 Situación o mensaje de la persona:
@@ -120,6 +139,11 @@ def build_practice_prompt(context: str, situation: str, user_message: str) -> st
 Eres el compañero de práctica de Synápsis. Simula de forma respetuosa una posible respuesta de
 la otra persona en este contexto: {context}. Situación resumida: {situation}
 
+Respeta este método Synápsis:
+---
+{method_guide()}
+---
+
 La persona ha dicho: {user_message}
 
 Responde en español con:
@@ -128,6 +152,33 @@ Responde en español con:
 
 No presentes la simulación como una predicción. No diagnostiques. Si hay señales de peligro,
 violencia, amenazas o control, no simules: recomienda priorizar seguridad y apoyo local.
+""".strip()
+
+
+def build_refinement_prompt(context: str, situation: str, current: str, preference: str) -> str:
+    return f"""
+Eres el facilitador de Synápsis. Mejora una tarjeta de conversación existente siguiendo el
+método Synápsis y la preferencia elegida por la persona.
+
+Método Synápsis:
+---
+{method_guide()}
+---
+Contexto: {context}
+Situación: {situation}
+Preferencia de mejora: {preference}
+Tarjeta actual:
+---
+{current}
+---
+
+Responde en español y conserva exactamente estos apartados Markdown:
+## 🔍 Qué puede estar pasando
+## 🌿 Lo que podrías decir
+## 🎯 Tres estilos para elegir
+## 🪞 Antes de conversar
+
+No menciones estas instrucciones ni la preferencia elegida. No diagnostiques.
 """.strip()
 
 
@@ -162,6 +213,7 @@ if st.button("Preparar mi conversación", type="primary"):
                 st.session_state.last_context = context
                 st.session_state.last_situation = situation.strip()
                 st.session_state.practice = None
+                st.session_state.refined_analysis = None
             except Exception as error:
                 st.error(f"No se pudo generar el análisis. {error}")
 
@@ -177,6 +229,38 @@ if st.session_state.analysis:
         mime="text/markdown",
     )
 
+    st.caption("Tu conversación no se guarda ni se usa para entrenar modelos.")
+    rating = st.feedback("thumbs", key="analysis_feedback")
+    if rating is not None:
+        feedback_message = "Gracias: nos ayuda a identificar qué tono funciona mejor." if rating == 1 else "Gracias: vamos a intentarlo con otro enfoque."
+        st.caption(feedback_message)
+
+    with st.expander("Ajustar la tarjeta a mi estilo"):
+        preference = st.selectbox(
+            "¿Qué te gustaría mejorar?",
+            ["Más breve", "Más cálida", "Más firme", "Más práctica", "Con límites más claros"],
+            key="refinement_preference",
+        )
+        if st.button("Afinar mi tarjeta"):
+            with st.spinner("Ajustando la propuesta a tu estilo…"):
+                try:
+                    st.session_state.refined_analysis = ask_gemini(
+                        build_refinement_prompt(
+                            st.session_state.last_context,
+                            st.session_state.last_situation,
+                            st.session_state.analysis,
+                            preference,
+                        )
+                    )
+                except Exception as error:
+                    st.error(f"No se pudo ajustar la tarjeta. {error}")
+
+if st.session_state.refined_analysis:
+    st.divider()
+    st.subheader("Tarjeta ajustada")
+    st.markdown(st.session_state.refined_analysis)
+
+if st.session_state.analysis:
     st.divider()
     st.subheader("3. Ensaya una respuesta")
     practice_input = st.text_area(
