@@ -380,7 +380,8 @@ st.caption("Observar · Comprender · Expresar · Pedir")
 st.info("Synápsis es una ayuda de comunicación, no terapia ni atención de emergencia.", icon="ℹ️")
 
 contexts = [
-    "Pareja, hijos adolescentes u otro",
+    "Pareja",
+    "Hijos adolescentes u otros",
     "Equipo deportivo",
     "Comunidad de vecinos",
     "Empresa / equipo de trabajo",
