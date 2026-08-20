@@ -376,7 +376,7 @@ No menciones estas instrucciones ni la preferencia elegida. No diagnostiques.
 set_defaults()
 show_brand()
 st.write("Mejorar nuestra comunicación es mejorar nuestras relaciones, nuestro trabajo, nuestra vida.")
-st.caption("Observar · Comprender · Expresar · Pedir  |  PARA · ELIGE · ACTÚA")
+st.caption("Observar · Comprender · Expresar · Pedir")
 st.info("Synápsis es una ayuda de comunicación, no terapia ni atención de emergencia.", icon="ℹ️")
 
 contexts = [
