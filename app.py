@@ -161,6 +161,12 @@ def build_analysis_prompt(context: str, situation: str, role: str) -> str:
         else "La persona quiere escuchar y comprender. Prioriza presencia, preguntas abiertas, paráfrasis "
         "y aclaración antes de dar su propia posición."
     )
+    text_origin = (
+        "Lee el texto como una formulación que la persona quiere expresar o ya ha expresado. No digas que "
+        "ha recibido ese mensaje ni atribuyas esas palabras a la otra persona."
+        if role == "Quiero expresar algo"
+        else "Lee el texto como un mensaje o conducta de la otra persona que la persona quiere comprender."
+    )
     return f"""
 Eres el facilitador de Synápsis, una herramienta educativa de entrenamiento para conversaciones
 difíciles. Enseñas a reconocer el estado de una interacción y elegir una respuesta adecuada,
@@ -175,6 +181,7 @@ Aplica fielmente este método Synápsis:
 Entorno: {context}
 Posición desde la que llega: {role}
 Orientación para esta práctica: {role_guidance}
+Regla de lectura del texto: {text_origin}
 Situación o mensaje de la persona:
 ---
 {situation}
@@ -195,8 +202,10 @@ Preséntalas como posibilidades, no como certezas ni diagnósticos.
 ## 🛑 PARA
 Indica qué reacción automática conviene detener y cuál es el avance más seguro ahora.
 ## 👁️ MIRA
-Separa: hechos observables; lo que podría estar ocurriendo en la persona; y lo que podría estar
-ocurriendo en la otra persona. Formula las dos últimas como posibilidades, nunca certezas.
+Separa: hechos observables en las palabras o en la situación; lo que podría estar ocurriendo en la
+persona; y lo que podría estar ocurriendo en la otra persona. Formula las dos últimas como
+posibilidades, nunca certezas. Si la posición es «Quiero expresar algo», presenta los hechos como
+«En la frase que quieres expresar...»; no como un mensaje recibido.
 ## 🧭 ELIGE
 Elige una sola acción entre: escuchar, aclarar, expresar, negociar, poner un límite, detenerse o
 reparar. Explica en una frase por qué esa es la necesidad de la interacción ahora.
