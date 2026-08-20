@@ -168,22 +168,20 @@ Situación o mensaje de la persona:
 Responde en español, con calidez y precisión. No repitas el relato. Usa exactamente estos
 apartados Markdown:
 
-## 🔍 Radiografía emocional
-Describe brevemente el clima emocional de la interacción. Incluye un «Índice de agresividad de la
-interacción: X/10», basado solo en el lenguaje, los hechos y la tensión descritos; no califiques ni
-diagnostiques a ninguna persona. Explica en una frase el índice. Añade la activación Verde, Amarillo
-o Rojo como orientación para decidir el ritmo de la conversación. Después enumera de dos a cuatro
-«Etiquetas emocionales y necesidades»: para cada una, expresa primero una emoción como verbo o
-experiencia en primera persona (por ejemplo: «me preocupa», «me duele», «me frustra») y, tras una
-flecha, la necesidad que podría haber detrás (por ejemplo: «me preocupa → necesito claridad»).
-Preséntalas como posibilidades, no como certezas ni diagnósticos.
+## 🗣️ ¿Qué estoy diciendo realmente?
+Explica primero el sentido explícito de la frase o de la posición de la persona. Después enumera de
+dos a cuatro parejas de emoción y necesidad posibles, expresadas como experiencia en primera persona
+(por ejemplo: «me preocupa → necesito claridad»). Si la posición es «Quiero expresar algo», parte de
+las palabras que quiere decir; no afirmes que las ha recibido. Incluye un «Índice de agresividad de
+la interacción: X/10», basado solo en el lenguaje, los hechos y la tensión descritos; nunca califiques
+a una persona. Añade la activación Verde, Amarillo o Rojo como orientación para el ritmo.
+## 🪞 ¿Qué me está queriendo decir realmente?
+Distingue entre lo que la otra persona ha dicho de forma observable y lo que podría estar intentando
+comunicar, necesitar o proteger. Usa formulaciones prudentes como «podría estar buscando…»; no atribuyas
+intenciones ni diagnostiques. Si no hay suficiente información sobre la otra persona, dilo y formula
+una pregunta abierta para comprobarlo.
 ## 🛑 PARA
 Indica qué reacción automática conviene detener y cuál es el avance más seguro ahora.
-## 👁️ MIRA
-Separa: hechos observables en las palabras o en la situación; lo que podría estar ocurriendo en la
-persona; y lo que podría estar ocurriendo en la otra persona. Formula las dos últimas como
-posibilidades, nunca certezas. Si la posición es «Quiero expresar algo», presenta los hechos como
-«En la frase que quieres expresar...»; no como un mensaje recibido.
 ## 🧭 ELIGE
 Elige una sola acción entre: escuchar, aclarar, expresar, negociar, poner un límite, detenerse o
 reparar. Explica en una frase por qué esa es la necesidad de la interacción ahora.
@@ -313,7 +311,7 @@ if st.button("Preparar mi conversación", type="primary"):
 
 if st.session_state.analysis:
     st.divider()
-    st.subheader("2. Radiografía emocional")
+    st.subheader("2. ¿Qué estoy diciendo realmente?")
     st.success("¡Tu análisis está listo! Léelo a continuación y, si quieres, ensaya una respuesta al final.")
     st.markdown(st.session_state.analysis)
 
