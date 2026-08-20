@@ -174,32 +174,35 @@ Evita lenguaje terapéutico, moralizante, etiquetas, presión o manipulación.
 """.strip()
 
 
-def build_practice_prompt(context: str, situation: str, user_message: str) -> str:
+def build_practice_prompt(context: str, situation: str) -> str:
     return f"""
-Eres el compañero de entrenamiento de Synápsis. Evalúas una respuesta inicial para que la persona
-pueda mejorarla en un segundo intento. Contexto: {context}. Situación: {situation}.
+Eres el facilitador de Synápsis. Diseña un diálogo estratégico breve de tres intervenciones de la
+persona y tres posibles réplicas del interlocutor. Su función es abrir alternativas y avanzar con
+claridad, nunca convencer, presionar ni manipular. Contexto: {context}. Situación: {situation}.
 
 Respeta este método Synápsis:
 ---
 {method_guide()}
 ---
 
-La persona ha dicho: {user_message}
-
 Responde en español con exactamente estos apartados Markdown:
 
-## ✅ Lo que has hecho bien
-Reconoce una habilidad concreta presente en la respuesta.
-## 🔧 El ajuste más útil
-Propón solo una mejora, vinculada a regulación, autocomprensión, expresión, escucha,
-discriminación, estrategia o reparación.
-## 🗣️ Posible respuesta del interlocutor
-Da una o dos frases respetuosas y verosímiles. No es una predicción ni debe incluir agresividad,
-presión o manipulación.
-## 🔁 Segundo intento
-Da una instrucción breve para responder de nuevo corrigiendo únicamente ese aspecto.
+## 🎯 Propósito del diálogo
+Explica en una frase qué avance pequeño y realista se busca.
+## 1. Abrir la conversación
+**Tú:** una intervención breve basada en observación o pregunta abierta.
+**La otra persona podría responder:** una réplica verosímil, no una predicción.
+## 2. Comprender y aclarar
+**Tú:** una intervención que recoja lo escuchado y aclare lo importante, sin conceder lo que no corresponde.
+**La otra persona podría responder:** una réplica verosímil.
+## 3. Proponer un siguiente paso
+**Tú:** una propuesta concreta, libre de presión, o un límite respetuoso si corresponde.
+**La otra persona podría responder:** una réplica verosímil.
+## 🧭 Clave para conducirlo
+Da una sola indicación breve sobre qué actitud sostener durante el diálogo.
 
-Si hay señales de peligro, violencia, amenazas o control, no simules: prioriza seguridad y apoyo local.
+En activación Roja, no diseñes un diálogo para resolver: formula una pausa segura y deja el resto
+para otro momento. Si hay señales de peligro, violencia, amenazas o control, prioriza seguridad y apoyo local.
 """.strip()
 
 
@@ -317,28 +320,20 @@ if st.session_state.refined_analysis:
 
 if st.session_state.analysis:
     st.divider()
-    st.subheader("3. Entrena tu respuesta")
-    practice_input = st.text_area(
-        "Escribe tu respuesta al reto",
-        placeholder="Escribe cómo responderías en esta situación.",
-        height=100,
-    )
-    if st.button("Analizar mi respuesta"):
-        if not practice_input.strip():
-            st.warning("Escribe primero tu respuesta al reto.")
-        else:
-            with st.spinner("Analizando tu respuesta…"):
-                try:
-                    st.session_state.practice = ask_gemini(
-                        build_practice_prompt(
-                            st.session_state.last_context,
-                            st.session_state.last_situation,
-                            practice_input.strip(),
-                        )
+    st.subheader("3. Diálogo estratégico: tres intervenciones")
+    st.caption("Recibirás tres intervenciones tuyas y tres posibles respuestas para ensayar el avance de la conversación.")
+    if st.button("Preparar el diálogo estratégico"):
+        with st.spinner("Preparando el diálogo estratégico…"):
+            try:
+                st.session_state.practice = ask_gemini(
+                    build_practice_prompt(
+                        st.session_state.last_context,
+                        st.session_state.last_situation,
                     )
-                except Exception as error:
-                    st.error(f"No se pudo crear la simulación. {error}")
+                )
+            except Exception as error:
+                st.error(f"No se pudo preparar el diálogo. {error}")
 
 if st.session_state.practice:
-    st.success("¡Feedback de entrenamiento listo!")
+    st.success("¡Diálogo estratégico listo!")
     st.markdown(st.session_state.practice)
