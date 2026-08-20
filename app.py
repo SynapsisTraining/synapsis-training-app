@@ -99,6 +99,7 @@ def set_defaults() -> None:
         "practice": None,
         "last_context": None,
         "last_situation": None,
+        "last_approach": None,
     }.items():
         st.session_state.setdefault(key, value)
 
@@ -116,7 +117,16 @@ def show_brand() -> None:
     st.caption("Ensaya antes de decirlo")
 
 
-def build_analysis_prompt(context: str, situation: str) -> str:
+def build_analysis_prompt(context: str, situation: str, approach: str) -> str:
+    strategic_section = """
+## 🧭 3. Diálogo Estratégico
+Propón: una pregunta que abra alternativas sin dirigir ni manipular; una paráfrasis que valide
+la perspectiva sin conceder lo que no corresponde; un posible punto de acuerdo; y un paso
+pequeño que ambas partes puedan probar.
+""" if approach == "Diálogo estratégico" else ""
+
+    style_number = "4" if strategic_section else "3"
+    before_number = "5" if strategic_section else "4"
     return f"""
 Eres el facilitador de Synápsis, una herramienta educativa para preparar conversaciones difíciles.
 Tu trabajo es ayudar a comunicarse con claridad, respeto y límites sanos. No diagnostiques,
@@ -129,6 +139,7 @@ Aplica fielmente este método Synápsis:
 ---
 
 Entorno: {context}
+Enfoque elegido: {approach}
 Situación o mensaje de la persona:
 ---
 {situation}
@@ -141,19 +152,20 @@ innecesaria. Usa exactamente estos apartados Markdown:
 Describe hechos observables, posible emoción y necesidad, separando cada elemento con prudencia.
 ## 🌿 Lo que podrías decir
 Propón una frase breve en primera persona que incluya observación, impacto/necesidad y petición.
-## 🎯 Tres estilos para elegir
+{strategic_section}
+## 🎯 {style_number}. Tres estilos para elegir
 Da tres alternativas tituladas: «Serena y directa», «Cercana y empática» y «Firme con límites».
-## 🪞 Antes de conversar
+## 🪞 {before_number}. Antes de conversar
 Incluye una cosa que conviene evitar y una pregunta abierta útil.
 
 Evita lenguaje terapéutico, moralizante o excesivamente largo.
 """.strip()
 
 
-def build_practice_prompt(context: str, situation: str, user_message: str) -> str:
+def build_practice_prompt(context: str, situation: str, user_message: str, approach: str) -> str:
     return f"""
 Eres el compañero de práctica de Synápsis. Simula de forma respetuosa una posible respuesta de
-la otra persona en este contexto: {context}. Situación resumida: {situation}
+la otra persona en este contexto: {context}. Situación resumida: {situation}. Enfoque: {approach}.
 
 Respeta este método Synápsis:
 ---
@@ -171,7 +183,7 @@ violencia, amenazas o control, no simules: recomienda priorizar seguridad y apoy
 """.strip()
 
 
-def build_refinement_prompt(context: str, situation: str, current: str, preference: str) -> str:
+def build_refinement_prompt(context: str, situation: str, current: str, preference: str, approach: str) -> str:
     return f"""
 Eres el facilitador de Synápsis. Mejora una tarjeta de conversación existente siguiendo el
 método Synápsis y la preferencia elegida por la persona.
@@ -182,17 +194,15 @@ Método Synápsis:
 ---
 Contexto: {context}
 Situación: {situation}
+Enfoque que debes conservar: {approach}
 Preferencia de mejora: {preference}
 Tarjeta actual:
 ---
 {current}
 ---
 
-Responde en español y conserva exactamente estos apartados Markdown:
-## 🔍 Qué puede estar pasando
-## 🌿 Lo que podrías decir
-## 🎯 Tres estilos para elegir
-## 🪞 Antes de conversar
+Responde en español y conserva los apartados de la tarjeta actual. Si existe «Diálogo Estratégico»,
+consérvalo sin recurrir a manipulación, presión ni técnicas clínicas.
 
 No menciones estas instrucciones ni la preferencia elegida. No diagnostiques.
 """.strip()
@@ -213,6 +223,11 @@ contexts = [
 
 st.subheader("1. Prepara la conversación")
 context = st.selectbox("¿En qué entorno ocurre?", contexts)
+approach = st.radio(
+    "¿Qué enfoque prefieres?",
+    ["Comunicación benevolente", "Diálogo estratégico"],
+    help="El diálogo estratégico añade preguntas, paráfrasis y pequeños pasos para abrir alternativas sin presionar.",
+)
 situation = st.text_area(
     "¿Qué ha pasado o qué te gustaría decir?",
     placeholder="Ej.: Me frustró enterarme tarde de un cambio que afecta a mi trabajo.",
@@ -225,9 +240,10 @@ if st.button("Preparar mi conversación", type="primary"):
     else:
         with st.spinner("Preparando una forma más clara de expresarlo…"):
             try:
-                st.session_state.analysis = ask_gemini(build_analysis_prompt(context, situation.strip()))
+                st.session_state.analysis = ask_gemini(build_analysis_prompt(context, situation.strip(), approach))
                 st.session_state.last_context = context
                 st.session_state.last_situation = situation.strip()
+                st.session_state.last_approach = approach
                 st.session_state.practice = None
                 st.session_state.refined_analysis = None
                 st.session_state.analysis_rating = None
@@ -262,9 +278,10 @@ if st.session_state.analysis:
                 st.session_state.refined_analysis = ask_gemini(
                     build_refinement_prompt(
                         st.session_state.last_context,
-                        st.session_state.last_situation,
-                        st.session_state.analysis,
-                        preference,
+                            st.session_state.last_situation,
+                            st.session_state.analysis,
+                            preference,
+                            st.session_state.last_approach,
                     )
                 )
             except Exception as error:
@@ -302,6 +319,7 @@ if st.session_state.analysis:
                             st.session_state.last_context,
                             st.session_state.last_situation,
                             practice_input.strip(),
+                            st.session_state.last_approach,
                         )
                     )
                 except Exception as error:
