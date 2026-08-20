@@ -274,7 +274,7 @@ No menciones estas instrucciones ni la preferencia elegida. No diagnostiques.
 
 set_defaults()
 show_brand()
-st.write("Entrena a reconocer el estado de una conversación y elegir cómo intervenir.")
+st.write("Mejorar nuestra comunicación es mejorar nuestras relaciones, nuestro trabajo, nuestra vida.")
 st.caption("PARA · MIRA · ELIGE · ACTÚA")
 st.info("Synápsis es una ayuda de comunicación, no terapia ni atención de emergencia.", icon="ℹ️")
 
