@@ -204,19 +204,21 @@ información, dilo y formula una pregunta abierta útil."""
     benevolent_alternatives = (
         """## 🔎 Señales en mi expresión
 Revisa la formulación en cinco dimensiones: **acusación**, **victimismo**, **declinación de
-responsabilidad**, **reproche** y **falta de intención de mejora**. Para cada una indica «presente»,
-«posible» o «no observable» y ofrece una justificación muy breve basada en palabras concretas del
-texto. Entiende «victimismo» solo como una posible expresión de impotencia o de poner todo el peso
-fuera de uno mismo, nunca como etiqueta de la persona. Entiende «declinación de responsabilidad» como
-evitar reconocer la propia parte de elección o contribución, no como obligar a asumir culpas ajenas.
+responsabilidad**, **reproche** y **falta de intención de mejora**. Muestra este apartado **solo si**
+existe al menos una señal presente o posible. En ese caso, enumera únicamente las señales detectadas
+como «presente» o «posible», con una justificación muy breve basada en palabras concretas del texto.
+No listes señales «no observables» ni nombres un problema inexistente. Entiende «victimismo» solo como
+una posible expresión de impotencia o de poner todo el peso fuera de uno mismo, nunca como etiqueta de
+la persona. Entiende «declinación de responsabilidad» como evitar reconocer la propia parte de elección
+o contribución, no como obligar a asumir culpas ajenas.
 
 ## 🌿 Tres alternativas más benevolentes
 Si alguna de esas señales está presente o es posible, ofrece **al menos tres** versiones alternativas
 que mantengan el asunto importante, el límite o la petición, pero reduzcan la agresividad. Titúlalas
 «1. Serena y directa», «2. Cercana y empática» y «3. Firme con límites». No las presentes como frases
-mágicas: explica en una línea qué cambia cada una. Si todas las señales son «no observable» y la
-formulación ya es clara y benevolente, indica brevemente que no es necesario reformularla y no
-inventes un problema. En las alternativas usa de forma natural, repartidos entre ellas, estos términos:
+mágicas: explica en una línea qué cambia cada una. Si no detectas señales, omite también el apartado
+«Señales en mi expresión», indica brevemente que no es necesario reformularla y no inventes un
+problema. En las alternativas usa de forma natural, repartidos entre ellas, estos términos:
 «entiendo», «comprendo», «observo», «deseo», «respeto», «ofrezco», «me comprometo» y «mejorar».
 Mantén el sentido del mensaje: no uses esas palabras solo como adorno ni elimines un límite legítimo."""
         if role == "Quiero expresar algo"
