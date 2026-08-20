@@ -169,6 +169,17 @@ Incluye un «Índice de agresividad de la interacción: X/10», basado solo en e
 la tensión descritos, y la activación Verde, Amarillo o Rojo como orientación para el ritmo. Si falta
 información, dilo y formula una pregunta abierta útil."""
     )
+    benevolent_alternatives = (
+        """## 🌿 Tres alternativas más benevolentes
+Evalúa si la formulación puede vivirse como acusación, descalificación, presión, amenaza, exigencia
+o cierre del diálogo. Si es así, ofrece **al menos tres** versiones alternativas que mantengan el
+asunto importante, el límite o la petición, pero reduzcan la agresividad. Titúlalas «1. Serena y
+directa», «2. Cercana y empática» y «3. Firme con límites». No las presentes como frases mágicas:
+explica en una línea qué cambia cada una. Si la formulación ya es clara y benevolente, indica
+brevemente que no es necesario reformularla y no inventes un problema."""
+        if role == "Quiero expresar algo"
+        else ""
+    )
     return f"""
 Eres el facilitador de Synápsis, una herramienta educativa de entrenamiento para conversaciones
 difíciles. Enseñas a reconocer el estado de una interacción y elegir una respuesta adecuada,
@@ -193,6 +204,7 @@ Responde en español, con calidez y precisión. No repitas el relato. Usa exacta
 apartados Markdown:
 
 {meaning_section}
+{benevolent_alternatives}
 ## 🛑 PARA
 Indica qué reacción automática conviene detener y cuál es el avance más seguro ahora.
 ## 🧩 Antes de intervenir
