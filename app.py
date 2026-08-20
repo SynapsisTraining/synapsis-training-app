@@ -114,6 +114,7 @@ def set_defaults() -> None:
         "practice": None,
         "last_context": None,
         "last_situation": None,
+        "last_role": None,
     }.items():
         st.session_state.setdefault(key, value)
 
@@ -131,7 +132,14 @@ def show_brand() -> None:
     st.caption("Ensaya antes de decirlo")
 
 
-def build_analysis_prompt(context: str, situation: str) -> str:
+def build_analysis_prompt(context: str, situation: str, role: str) -> str:
+    role_guidance = (
+        "La persona quiere expresar algo propio. Prioriza una expresión clara, una petición o un límite "
+        "cuando sea adecuado."
+        if role == "Quiero expresar algo"
+        else "La persona quiere escuchar y comprender. Prioriza presencia, preguntas abiertas, paráfrasis "
+        "y aclaración antes de dar su propia posición."
+    )
     return f"""
 Eres el facilitador de Synápsis, una herramienta educativa de entrenamiento para conversaciones
 difíciles. Enseñas a reconocer el estado de una interacción y elegir una respuesta adecuada,
@@ -144,6 +152,8 @@ Aplica fielmente este método Synápsis:
 ---
 
 Entorno: {context}
+Posición desde la que llega: {role}
+Orientación para esta práctica: {role_guidance}
 Situación o mensaje de la persona:
 ---
 {situation}
@@ -174,11 +184,17 @@ Evita lenguaje terapéutico, moralizante, etiquetas, presión o manipulación.
 """.strip()
 
 
-def build_practice_prompt(context: str, situation: str) -> str:
+def build_practice_prompt(context: str, situation: str, role: str) -> str:
+    role_guidance = (
+        "Las tres intervenciones deben ayudar a expresar con claridad, sin perder escucha ni respeto."
+        if role == "Quiero expresar algo"
+        else "Las tres intervenciones deben ayudar a escuchar y comprender primero, sin asumir ni interrogar."
+    )
     return f"""
 Eres el facilitador de Synápsis. Diseña un diálogo estratégico breve de tres intervenciones de la
 persona y tres posibles réplicas del interlocutor. Su función es abrir alternativas y avanzar con
 claridad, nunca convencer, presionar ni manipular. Contexto: {context}. Situación: {situation}.
+Posición de la persona: {role}. {role_guidance}
 
 Respeta este método Synápsis:
 ---
@@ -206,7 +222,7 @@ para otro momento. Si hay señales de peligro, violencia, amenazas o control, pr
 """.strip()
 
 
-def build_refinement_prompt(context: str, situation: str, current: str, preference: str) -> str:
+def build_refinement_prompt(context: str, situation: str, current: str, preference: str, role: str) -> str:
     return f"""
 Eres el facilitador de Synápsis. Mejora una tarjeta de conversación existente siguiendo el
 método Synápsis y la preferencia elegida por la persona.
@@ -217,6 +233,7 @@ Método Synápsis:
 ---
 Contexto: {context}
 Situación: {situation}
+Posición de la persona: {role}
 Preferencia de mejora: {preference}
 Tarjeta actual:
 ---
@@ -245,8 +262,13 @@ contexts = [
 
 st.subheader("1. Prepara la conversación")
 context = st.selectbox("¿En qué entorno ocurre?", contexts)
+role = st.selectbox(
+    "¿Desde qué posición llegas a esta conversación?",
+    ["Quiero expresar algo", "Quiero escuchar y comprender"],
+    help="La propuesta se adaptará a si necesitas hablar tú o si necesitas comprender a la otra persona.",
+)
 situation = st.text_area(
-    "¿Qué ha pasado o qué te gustaría decir?",
+    "¿Qué ha pasado o qué te gustaría abordar?",
     placeholder="Ej.: Me frustró enterarme tarde de un cambio que afecta a mi trabajo.",
     height=140,
 )
@@ -257,9 +279,10 @@ if st.button("Preparar mi conversación", type="primary"):
     else:
         with st.spinner("Preparando una forma más clara de expresarlo…"):
             try:
-                st.session_state.analysis = ask_gemini(build_analysis_prompt(context, situation.strip()))
+                st.session_state.analysis = ask_gemini(build_analysis_prompt(context, situation.strip(), role))
                 st.session_state.last_context = context
                 st.session_state.last_situation = situation.strip()
+                st.session_state.last_role = role
                 st.session_state.practice = None
                 st.session_state.refined_analysis = None
                 st.session_state.analysis_rating = None
@@ -300,6 +323,7 @@ if st.session_state.analysis:
                             st.session_state.last_situation,
                             st.session_state.analysis,
                             preference,
+                            st.session_state.last_role,
                         )
                     )
                 except Exception as error:
@@ -329,6 +353,7 @@ if st.session_state.analysis:
                     build_practice_prompt(
                         st.session_state.last_context,
                         st.session_state.last_situation,
+                        st.session_state.last_role,
                     )
                 )
             except Exception as error:
