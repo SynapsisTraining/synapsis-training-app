@@ -129,7 +129,6 @@ def show_brand() -> None:
     if logo.exists():
         st.image(str(logo), width=230)
     st.title("🌿 Synápsis Training")
-    st.caption("Ensaya antes de decirlo")
 
 
 def build_analysis_prompt(context: str, situation: str, role: str) -> str:
