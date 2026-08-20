@@ -236,6 +236,32 @@ if st.session_state.analysis:
     st.divider()
     st.subheader("2. Tu tarjeta de conversación")
     st.success("¡Tu análisis está listo! Léelo a continuación y, si quieres, ensaya una respuesta al final.")
+    st.subheader("Ajusta el enfoque")
+    st.caption("Puedes cambiar el tono antes de leer la tarjeta. Tu conversación no se guarda.")
+    rating = st.feedback("thumbs", key="analysis_feedback")
+    if rating is not None:
+        feedback_message = "Gracias: nos ayuda a identificar qué tono funciona mejor." if rating == 1 else "Gracias: vamos a intentarlo con otro enfoque."
+        st.caption(feedback_message)
+
+    preference = st.selectbox(
+        "¿Qué te gustaría mejorar?",
+        ["Más breve", "Más cálida", "Más firme", "Más práctica", "Con límites más claros"],
+        key="refinement_preference",
+    )
+    if st.button("Afinar mi tarjeta"):
+        with st.spinner("Ajustando la propuesta a tu estilo…"):
+            try:
+                st.session_state.refined_analysis = ask_gemini(
+                    build_refinement_prompt(
+                        st.session_state.last_context,
+                        st.session_state.last_situation,
+                        st.session_state.analysis,
+                        preference,
+                    )
+                )
+            except Exception as error:
+                st.error(f"No se pudo ajustar la tarjeta. {error}")
+
     st.markdown(st.session_state.analysis)
     st.download_button(
         "Descargar mi tarjeta (Markdown)",
@@ -243,32 +269,6 @@ if st.session_state.analysis:
         file_name="tarjeta_conversacion_synapsis.md",
         mime="text/markdown",
     )
-
-    st.caption("Tu conversación no se guarda ni se usa para entrenar modelos.")
-    rating = st.feedback("thumbs", key="analysis_feedback")
-    if rating is not None:
-        feedback_message = "Gracias: nos ayuda a identificar qué tono funciona mejor." if rating == 1 else "Gracias: vamos a intentarlo con otro enfoque."
-        st.caption(feedback_message)
-
-    with st.expander("Ajustar la tarjeta a mi estilo"):
-        preference = st.selectbox(
-            "¿Qué te gustaría mejorar?",
-            ["Más breve", "Más cálida", "Más firme", "Más práctica", "Con límites más claros"],
-            key="refinement_preference",
-        )
-        if st.button("Afinar mi tarjeta"):
-            with st.spinner("Ajustando la propuesta a tu estilo…"):
-                try:
-                    st.session_state.refined_analysis = ask_gemini(
-                        build_refinement_prompt(
-                            st.session_state.last_context,
-                            st.session_state.last_situation,
-                            st.session_state.analysis,
-                            preference,
-                        )
-                    )
-                except Exception as error:
-                    st.error(f"No se pudo ajustar la tarjeta. {error}")
 
 if st.session_state.refined_analysis:
     st.divider()
