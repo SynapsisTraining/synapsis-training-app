@@ -150,21 +150,24 @@ def build_analysis_prompt(context: str, situation: str, role: str) -> str:
         else "Lee el texto como un mensaje o conducta de la otra persona que la persona quiere comprender."
     )
     meaning_section = (
-        """## 🗣️ ¿Qué estoy diciendo realmente?
-Explica primero el sentido explícito de la frase o de la posición de la persona. Después enumera de
-dos a cuatro parejas de emoción y necesidad posibles, expresadas como experiencia en primera persona
-(por ejemplo: «me preocupa → necesito claridad»). Parte de las palabras que quiere decir; no afirmes
-que las ha recibido. Incluye un «Índice de agresividad de la interacción: X/10», basado solo en el
-lenguaje, los hechos y la tensión descritos; nunca califiques a una persona. Añade la activación
-Verde, Amarillo o Rojo como orientación para el ritmo."""
+        """## 🗣️ ¿Cómo podría recibirlo la otra persona?
+Explica primero, de forma breve, el sentido explícito de la frase que la persona quiere expresar.
+Después describe cómo podría sentirse quien la lee o escucha y qué necesidad podría activarse en esa
+persona. Enumera de dos a cuatro parejas posibles de emoción y necesidad (por ejemplo: «podría
+sentirse presionada → podría necesitar seguridad»). Usa siempre formulaciones prudentes: son efectos
+posibles del mensaje, no una lectura de la mente. Incluye un «Índice de agresividad de la interacción:
+X/10», basado solo en el lenguaje, los hechos y la tensión descritos; nunca califiques a una persona.
+Añade la activación Verde, Amarillo o Rojo como orientación para el ritmo."""
         if role == "Quiero expresar algo"
-        else """## 🪞 ¿Qué me está diciendo realmente?
-Distingue entre lo que la otra persona ha dicho de forma observable y lo que podría estar intentando
-comunicar, necesitar o proteger. Expresa de dos a cuatro parejas posibles de emoción y necesidad
-(por ejemplo: «podría estar preocupada → podría necesitar claridad»). Usa formulaciones prudentes;
-no atribuyas intenciones ni diagnostiques. Incluye un «Índice de agresividad de la interacción: X/10»,
-basado solo en el lenguaje, los hechos y la tensión descritos, y la activación Verde, Amarillo o Rojo
-como orientación para el ritmo. Si falta información, dilo y formula una pregunta abierta útil."""
+        else """## 🪞 ¿Qué podría estar sintiendo al leer o escuchar esto?
+Explica primero, de forma breve, las palabras o hechos observables que ha comunicado la otra persona.
+Después describe qué podría estar sintiendo la persona consultante al leer o escuchar ese mensaje y
+qué necesidad propia podría activarse. Enumera de dos a cuatro parejas posibles de emoción y necesidad
+(por ejemplo: «podrías sentirte inquieta → podrías necesitar claridad»). Usa formulaciones prudentes:
+son posibilidades para que la persona se reconozca, no una interpretación cerrada ni un diagnóstico.
+Incluye un «Índice de agresividad de la interacción: X/10», basado solo en el lenguaje, los hechos y
+la tensión descritos, y la activación Verde, Amarillo o Rojo como orientación para el ritmo. Si falta
+información, dilo y formula una pregunta abierta útil."""
     )
     return f"""
 Eres el facilitador de Synápsis, una herramienta educativa de entrenamiento para conversaciones
@@ -330,9 +333,9 @@ if st.button("Preparar mi conversación", type="primary"):
 if st.session_state.analysis:
     st.divider()
     analysis_question = (
-        "¿Qué estoy diciendo realmente?"
+        "¿Cómo podría recibirlo la otra persona?"
         if st.session_state.last_role == "Quiero expresar algo"
-        else "¿Qué me está diciendo realmente?"
+        else "¿Qué podría estar sintiendo al leer o escuchar esto?"
     )
     st.subheader(f"2. {analysis_question}")
     st.success("¡Tu análisis está listo! Léelo a continuación y, si quieres, ensaya una respuesta al final.")
