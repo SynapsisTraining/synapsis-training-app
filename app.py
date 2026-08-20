@@ -166,9 +166,10 @@ Describe brevemente el clima emocional de la interacción. Incluye un «Índice 
 interacción: X/10», basado solo en el lenguaje, los hechos y la tensión descritos; no califiques ni
 diagnostiques a ninguna persona. Explica en una frase el índice. Añade la activación Verde, Amarillo
 o Rojo como orientación para decidir el ritmo de la conversación. Después enumera de dos a cuatro
-«Etiquetas emocionales» que se desprendan del texto. Exprésalas preferentemente como verbos o
-experiencias en primera persona (por ejemplo: «me preocupa», «me duele», «me frustra») y preséntalas
-como posibilidades, no como certezas ni diagnósticos.
+«Etiquetas emocionales y necesidades»: para cada una, expresa primero una emoción como verbo o
+experiencia en primera persona (por ejemplo: «me preocupa», «me duele», «me frustra») y, tras una
+flecha, la necesidad que podría haber detrás (por ejemplo: «me preocupa → necesito claridad»).
+Preséntalas como posibilidades, no como certezas ni diagnósticos.
 ## 🛑 PARA
 Indica qué reacción automática conviene detener y cuál es el avance más seguro ahora.
 ## 👁️ MIRA
