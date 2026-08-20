@@ -145,6 +145,23 @@ def build_analysis_prompt(context: str, situation: str, role: str) -> str:
         if role == "Quiero expresar algo"
         else "Lee el texto como un mensaje o conducta de la otra persona que la persona quiere comprender."
     )
+    meaning_section = (
+        """## 🗣️ ¿Qué estoy diciendo realmente?
+Explica primero el sentido explícito de la frase o de la posición de la persona. Después enumera de
+dos a cuatro parejas de emoción y necesidad posibles, expresadas como experiencia en primera persona
+(por ejemplo: «me preocupa → necesito claridad»). Parte de las palabras que quiere decir; no afirmes
+que las ha recibido. Incluye un «Índice de agresividad de la interacción: X/10», basado solo en el
+lenguaje, los hechos y la tensión descritos; nunca califiques a una persona. Añade la activación
+Verde, Amarillo o Rojo como orientación para el ritmo."""
+        if role == "Quiero expresar algo"
+        else """## 🪞 ¿Qué me está diciendo realmente?
+Distingue entre lo que la otra persona ha dicho de forma observable y lo que podría estar intentando
+comunicar, necesitar o proteger. Expresa de dos a cuatro parejas posibles de emoción y necesidad
+(por ejemplo: «podría estar preocupada → podría necesitar claridad»). Usa formulaciones prudentes;
+no atribuyas intenciones ni diagnostiques. Incluye un «Índice de agresividad de la interacción: X/10»,
+basado solo en el lenguaje, los hechos y la tensión descritos, y la activación Verde, Amarillo o Rojo
+como orientación para el ritmo. Si falta información, dilo y formula una pregunta abierta útil."""
+    )
     return f"""
 Eres el facilitador de Synápsis, una herramienta educativa de entrenamiento para conversaciones
 difíciles. Enseñas a reconocer el estado de una interacción y elegir una respuesta adecuada,
@@ -168,18 +185,7 @@ Situación o mensaje de la persona:
 Responde en español, con calidez y precisión. No repitas el relato. Usa exactamente estos
 apartados Markdown:
 
-## 🗣️ ¿Qué estoy diciendo realmente?
-Explica primero el sentido explícito de la frase o de la posición de la persona. Después enumera de
-dos a cuatro parejas de emoción y necesidad posibles, expresadas como experiencia en primera persona
-(por ejemplo: «me preocupa → necesito claridad»). Si la posición es «Quiero expresar algo», parte de
-las palabras que quiere decir; no afirmes que las ha recibido. Incluye un «Índice de agresividad de
-la interacción: X/10», basado solo en el lenguaje, los hechos y la tensión descritos; nunca califiques
-a una persona. Añade la activación Verde, Amarillo o Rojo como orientación para el ritmo.
-## 🪞 ¿Qué me está queriendo decir realmente?
-Distingue entre lo que la otra persona ha dicho de forma observable y lo que podría estar intentando
-comunicar, necesitar o proteger. Usa formulaciones prudentes como «podría estar buscando…»; no atribuyas
-intenciones ni diagnostiques. Si no hay suficiente información sobre la otra persona, dilo y formula
-una pregunta abierta para comprobarlo.
+{meaning_section}
 ## 🛑 PARA
 Indica qué reacción automática conviene detener y cuál es el avance más seguro ahora.
 ## 🧭 ELIGE
@@ -311,7 +317,12 @@ if st.button("Preparar mi conversación", type="primary"):
 
 if st.session_state.analysis:
     st.divider()
-    st.subheader("2. ¿Qué estoy diciendo realmente?")
+    analysis_question = (
+        "¿Qué estoy diciendo realmente?"
+        if st.session_state.last_role == "Quiero expresar algo"
+        else "¿Qué me está diciendo realmente?"
+    )
+    st.subheader(f"2. {analysis_question}")
     st.success("¡Tu análisis está listo! Léelo a continuación y, si quieres, ensaya una respuesta al final.")
     st.markdown(st.session_state.analysis)
 
