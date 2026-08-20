@@ -94,6 +94,7 @@ def ask_gemini(instruction: str) -> str:
 def set_defaults() -> None:
     for key, value in {
         "analysis": None,
+        "analysis_rating": None,
         "refined_analysis": None,
         "practice": None,
         "last_context": None,
@@ -229,6 +230,7 @@ if st.button("Preparar mi conversación", type="primary"):
                 st.session_state.last_situation = situation.strip()
                 st.session_state.practice = None
                 st.session_state.refined_analysis = None
+                st.session_state.analysis_rating = None
             except Exception as error:
                 st.error(f"No se pudo generar el análisis. {error}")
 
@@ -238,7 +240,13 @@ if st.session_state.analysis:
     st.success("¡Tu análisis está listo! Léelo a continuación y, si quieres, ensaya una respuesta al final.")
     st.subheader("Ajusta el enfoque")
     st.caption("Puedes cambiar el tono antes de leer la tarjeta. Tu conversación no se guarda.")
-    rating = st.feedback("thumbs", key="analysis_feedback")
+    helpful_col, improve_col = st.columns(2)
+    if helpful_col.button("👍 Me ha servido", key="helpful_feedback"):
+        st.session_state.analysis_rating = 1
+    if improve_col.button("👎 Necesito otro enfoque", key="improve_feedback"):
+        st.session_state.analysis_rating = 0
+
+    rating = st.session_state.analysis_rating
     if rating is not None:
         feedback_message = "Gracias: nos ayuda a identificar qué tono funciona mejor." if rating == 1 else "Gracias: vamos a intentarlo con otro enfoque."
         st.caption(feedback_message)
