@@ -179,8 +179,12 @@ reparar. Explica en una frase por qué esa es la necesidad de la interacción ah
 Propón una intervención breve, realista y en primera persona que ejecute la acción elegida. Si el
 estado es Rojo, ofrece una pausa segura: no intentes resolver el contenido del conflicto.
 ## 🎯 Tu reto de entrenamiento
-Pide a la persona que escriba su propia primera respuesta. Da una única instrucción clara para
-ese intento.
+Formula un reto breve que distinga claramente tres tiempos:
+- **Pasado:** qué hecho conviene reconocer sin intentar cambiarlo.
+- **Presente:** qué decisión, petición, límite o escucha es posible elegir ahora.
+- **Futuro:** qué paso concreto puede nacer de esa decisión presente.
+Recuerda en una frase que el pasado no se puede cambiar y que el futuro será fruto de lo que se
+decida en el presente. Pide después una primera respuesta propia con una única instrucción clara.
 
 Evita lenguaje terapéutico, moralizante, etiquetas, presión o manipulación.
 """.strip()
