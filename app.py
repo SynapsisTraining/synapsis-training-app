@@ -250,9 +250,10 @@ Aplica de forma breve y explícita esta secuencia:
 - **Expresar:** nombra en primera persona el impacto, emoción o necesidad propia, sin acusar.
 - **Pedir:** propone una petición concreta, posible y libre de presión; no una exigencia.
 - **Revisar mi parte (Naikan):** mira con hechos concretos qué he recibido de esta persona o situación,
-  qué he ofrecido yo y qué dificultad podría haber contribuido a causar. Hazlo sin culpa ni
-  autoacusación; reconocer la propia parte no elimina la responsabilidad de la otra persona ni obliga
-  a tolerar una conducta dañina.
+  qué he ofrecido yo y qué dificultad podría haber contribuido a causar. Al revisar lo recibido y lo
+  ofrecido, considera si ha habido **apoyo económico, escucha, favores o confiabilidad**, sin dar nada
+  por supuesto. Hazlo sin culpa ni autoacusación; reconocer la propia parte no elimina la
+  responsabilidad de la otra persona ni obliga a tolerar una conducta dañina.
 ## 🧭 ELIGE
 Elige una sola acción entre: escuchar, aclarar, expresar, negociar, poner un límite, detenerse o
 reparar. Explica en una frase por qué esa es la necesidad de la interacción ahora.
