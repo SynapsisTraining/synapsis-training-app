@@ -162,9 +162,11 @@ Situación o mensaje de la persona:
 Responde en español, con calidez y precisión. No repitas el relato. Usa exactamente estos
 apartados Markdown:
 
-## 🚦 Estado de la conversación
-Clasifica la activación como Verde, Amarillo o Rojo y explica brevemente por qué. No presentes
-esto como diagnóstico.
+## 🔍 Radiografía emocional
+Describe brevemente el clima emocional de la interacción. Incluye un «Índice de agresividad de la
+interacción: X/10», basado solo en el lenguaje, los hechos y la tensión descritos; no califiques ni
+diagnostiques a ninguna persona. Explica en una frase el índice. Añade la activación Verde, Amarillo
+o Rojo como orientación para decidir el ritmo de la conversación.
 ## 🛑 PARA
 Indica qué reacción automática conviene detener y cuál es el avance más seguro ahora.
 ## 👁️ MIRA
@@ -293,19 +295,6 @@ if st.session_state.analysis:
     st.divider()
     st.subheader("2. Tu tarjeta de conversación")
     st.success("¡Tu análisis está listo! Léelo a continuación y, si quieres, ensaya una respuesta al final.")
-    st.markdown("#### ¿Te ha servido esta propuesta?")
-    st.caption("Tu conversación no se guarda. Tu valoración solo ajusta esta sesión.")
-    helpful_col, improve_col = st.columns(2)
-    if helpful_col.button("👍 Me ha servido", key="helpful_feedback"):
-        st.session_state.analysis_rating = 1
-    if improve_col.button("👎 Necesito otro enfoque", key="improve_feedback"):
-        st.session_state.analysis_rating = 0
-
-    rating = st.session_state.analysis_rating
-    if rating is not None:
-        feedback_message = "Gracias: nos ayuda a identificar qué tono funciona mejor." if rating == 1 else "Gracias: vamos a intentarlo con otro enfoque."
-        st.caption(feedback_message)
-
     with st.container(border=True):
         st.markdown("#### Ajusta tu tarjeta")
         st.caption("Elige el cambio que quieres aplicar y te propondré una versión alternativa.")
@@ -362,3 +351,18 @@ if st.session_state.analysis:
 if st.session_state.practice:
     st.success("¡Diálogo estratégico listo!")
     st.markdown(st.session_state.practice)
+
+if st.session_state.analysis:
+    st.divider()
+    st.markdown("#### ¿Te ha servido esta propuesta?")
+    st.caption("Tu conversación no se guarda. Tu valoración solo ajusta esta sesión.")
+    helpful_col, improve_col = st.columns(2)
+    if helpful_col.button("👍 Me ha servido", key="helpful_feedback"):
+        st.session_state.analysis_rating = 1
+    if improve_col.button("👎 Necesito otro enfoque", key="improve_feedback"):
+        st.session_state.analysis_rating = 0
+
+    rating = st.session_state.analysis_rating
+    if rating is not None:
+        feedback_message = "Gracias: nos ayuda a identificar qué tono funciona mejor." if rating == 1 else "Gracias: vamos a intentarlo con otro enfoque."
+        st.caption(feedback_message)
