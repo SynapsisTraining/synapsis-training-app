@@ -22,6 +22,10 @@ Principios: me comprendo, me expreso y te comprendo.
 Competencias observables: regulación, autocomprensión, expresión, escucha,
 discriminación, estrategia y reparación.
 
+Regla central antes de intervenir: observar antes de juzgar, comprender antes de
+responder, expresar antes de acusar y pedir antes de exigir. Se traduce siempre en:
+Observar → Comprender → Expresar → Pedir.
+
 Con activación roja, no se intenta resolver: se pausa, regula y evita escalar.
 Comprender no equivale a aprobar. Reparar no exige perdonar ni reconciliarse.
 Evita etiquetas, amenazas, culpabilización y técnicas de presión o manipulación.
@@ -188,16 +192,24 @@ apartados Markdown:
 {meaning_section}
 ## 🛑 PARA
 Indica qué reacción automática conviene detener y cuál es el avance más seguro ahora.
+## 🧩 Antes de intervenir
+Aplica de forma breve y explícita esta secuencia:
+- **Observar:** separa un hecho o unas palabras concretas de cualquier interpretación.
+- **Comprender:** formula qué podría estar viviendo o necesitando la otra persona, como posibilidad.
+- **Expresar:** nombra en primera persona el impacto, emoción o necesidad propia, sin acusar.
+- **Pedir:** propone una petición concreta, posible y libre de presión; no una exigencia.
 ## 🧭 ELIGE
 Elige una sola acción entre: escuchar, aclarar, expresar, negociar, poner un límite, detenerse o
 reparar. Explica en una frase por qué esa es la necesidad de la interacción ahora.
 ## 💬 ACTÚA
-Propón una intervención breve, realista y en primera persona que ejecute la acción elegida. Si el
-estado es Rojo, ofrece una pausa segura: no intentes resolver el contenido del conflicto.
+Propón una intervención breve, realista y en primera persona que ejecute la acción elegida. Cuando
+corresponda, incluye una petición concreta y libre de presión. Si el estado es Rojo, ofrece una pausa
+segura: no intentes resolver el contenido del conflicto.
 ## 💳 Tarjeta de conversación
 Reúne una propuesta breve y usable para esta situación: una frase de inicio, una pregunta abierta
 o escucha útil cuando corresponda, y un posible siguiente paso. Mantén claridad, respeto y límites
-sanos; adapta la tarjeta a la posición desde la que llega la persona.
+sanos; adapta la tarjeta a la posición desde la que llega la persona. Si hay una petición, debe ser
+concreta, posible y permitir una respuesta libre.
 ## 🎯 Tu reto de entrenamiento
 Formula un reto breve que distinga claramente tres tiempos:
 - **Pasado:** qué hecho conviene reconocer sin intentar cambiarlo.
@@ -275,7 +287,7 @@ No menciones estas instrucciones ni la preferencia elegida. No diagnostiques.
 set_defaults()
 show_brand()
 st.write("Mejorar nuestra comunicación es mejorar nuestras relaciones, nuestro trabajo, nuestra vida.")
-st.caption("PARA · MIRA · ELIGE · ACTÚA")
+st.caption("Observar · Comprender · Expresar · Pedir  |  PARA · ELIGE · ACTÚA")
 st.info("Synápsis es una ayuda de comunicación, no terapia ni atención de emergencia.", icon="ℹ️")
 
 contexts = [
