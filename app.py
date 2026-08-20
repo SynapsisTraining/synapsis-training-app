@@ -331,13 +331,6 @@ if st.session_state.analysis:
                 except Exception as error:
                     st.error(f"No se pudo ajustar la tarjeta. {error}")
 
-    st.download_button(
-        "Descargar mi tarjeta (Markdown)",
-        data=st.session_state.analysis,
-        file_name="tarjeta_conversacion_synapsis.md",
-        mime="text/markdown",
-    )
-
 if st.session_state.refined_analysis:
     st.divider()
     st.subheader("Tarjeta ajustada")
@@ -367,7 +360,7 @@ if st.session_state.practice:
 if st.session_state.analysis:
     st.divider()
     st.markdown("#### ¿Te ha servido esta propuesta?")
-    st.caption("Tu conversación no se guarda. Tu valoración solo ajusta esta sesión.")
+    st.caption("Tu conversación y tu valoración no se guardan ni se envían: se eliminan al recargar la página.")
     helpful_col, improve_col = st.columns(2)
     if helpful_col.button("👍 Me ha servido", key="helpful_feedback"):
         st.session_state.analysis_rating = 1
@@ -376,5 +369,12 @@ if st.session_state.analysis:
 
     rating = st.session_state.analysis_rating
     if rating is not None:
-        feedback_message = "Gracias: nos ayuda a identificar qué tono funciona mejor." if rating == 1 else "Gracias: vamos a intentarlo con otro enfoque."
+        feedback_message = "Gracias por indicarlo." if rating == 1 else "Gracias por indicarlo: puedes ajustar la tarjeta o preparar otra conversación."
         st.caption(feedback_message)
+
+    st.download_button(
+        "Descargar mi tarjeta (Markdown)",
+        data=st.session_state.refined_analysis or st.session_state.analysis,
+        file_name="tarjeta_conversacion_synapsis.md",
+        mime="text/markdown",
+    )
