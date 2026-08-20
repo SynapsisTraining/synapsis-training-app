@@ -145,7 +145,9 @@ def show_brand() -> None:
     st.title("🌿 Synápsis Training")
 
 
-def build_analysis_prompt(context: str, situation: str, role: str) -> str:
+def build_analysis_prompt(
+    context: str, situation: str, role: str, expression_purpose: str = ""
+) -> str:
     role_guidance = (
         "La persona quiere expresar algo propio. Prioriza una expresión clara, una petición o un límite "
         "cuando sea adecuado."
@@ -158,6 +160,17 @@ def build_analysis_prompt(context: str, situation: str, role: str) -> str:
         "ha recibido ese mensaje ni atribuyas esas palabras a la otra persona."
         if role == "Quiero expresar algo"
         else "Lee el texto como un mensaje o conducta de la otra persona que la persona quiere comprender."
+    )
+    purpose_guidance = (
+        f"""Antes de redactar, ten en cuenta estas respuestas de la persona sobre lo que espera
+conseguir al expresarse:
+---
+{expression_purpose}
+---
+Úsalas como brújula para la elección, la intervención y la tarjeta. No las repitas literalmente ni
+conviertas el deseo de la persona en una exigencia hacia la otra."""
+        if role == "Quiero expresar algo" and expression_purpose.strip()
+        else ""
     )
     meaning_section = (
         """## 🗣️ ¿Cómo podría recibirlo la otra persona?
@@ -217,6 +230,7 @@ Entorno: {context}
 Posición desde la que llega: {role}
 Orientación para esta práctica: {role_guidance}
 Regla de lectura del texto: {text_origin}
+{purpose_guidance}
 Situación o mensaje de la persona:
 ---
 {situation}
@@ -346,6 +360,28 @@ role = st.selectbox(
     ["Quiero expresar algo", "Quiero escuchar y comprender"],
     help="La propuesta se adaptará a si necesitas hablar tú o si necesitas comprender a la otra persona.",
 )
+expression_purpose = ""
+if role == "Quiero expresar algo":
+    st.markdown("#### Antes de expresarte: ¿qué esperas conseguir?")
+    st.caption("Estas tres preguntas son opcionales; sirven para orientar tu propuesta con más claridad.")
+    purpose_understanding = st.text_input(
+        "1. ¿Qué te gustaría que la otra persona comprendiera?",
+        key="purpose_understanding",
+    )
+    purpose_next_step = st.text_input(
+        "2. ¿Qué cambio, decisión o siguiente paso te gustaría abrir?",
+        key="purpose_next_step",
+    )
+    purpose_care = st.text_input(
+        "3. ¿Qué quieres cuidar al decirlo?",
+        placeholder="Por ejemplo: el respeto, la relación, un límite o la confianza.",
+        key="purpose_care",
+    )
+    expression_purpose = (
+        f"1. Que comprenda: {purpose_understanding or 'Sin respuesta.'}\n"
+        f"2. Siguiente paso: {purpose_next_step or 'Sin respuesta.'}\n"
+        f"3. Lo que quiero cuidar: {purpose_care or 'Sin respuesta.'}"
+    )
 situation = st.text_area(
     "¿Qué ha pasado o qué te gustaría abordar?",
     placeholder="Ej.: Me frustró enterarme tarde de un cambio que afecta a mi trabajo.",
@@ -358,7 +394,9 @@ if st.button("Preparar mi conversación", type="primary"):
     else:
         with st.spinner("Preparando una forma más clara de expresarlo…"):
             try:
-                st.session_state.analysis = ask_gemini(build_analysis_prompt(context, situation.strip(), role))
+                st.session_state.analysis = ask_gemini(
+                    build_analysis_prompt(context, situation.strip(), role, expression_purpose)
+                )
                 st.session_state.last_context = context
                 st.session_state.last_situation = situation.strip()
                 st.session_state.last_role = role
