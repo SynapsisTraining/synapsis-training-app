@@ -172,6 +172,15 @@ conviertas el deseo de la persona en una exigencia hacia la otra."""
         if role == "Quiero expresar algo" and expression_purpose.strip()
         else ""
     )
+    sports_context_guidance = (
+        """Pauta específica del entorno deportivo: antes de recomendar una expresión, revisa si puede
+haber factores de estrés situacional —ruido, presencia de niños, jugadores cansados, prisa o un
+conflicto latente—. No los des por hechos: preséntalos como comprobaciones útiles. Si alguno está
+presente, prioriza bajar el ritmo, buscar un momento o lugar más adecuado y posponer la conversación
+de contenido si fuera necesario."""
+        if context == "Equipo deportivo" and role == "Quiero expresar algo"
+        else ""
+    )
     meaning_section = (
         """## 🗣️ ¿Cómo podría recibirlo la otra persona?
 Explica primero, de forma breve, el sentido explícito de la frase que la persona quiere expresar.
@@ -231,6 +240,7 @@ Posición desde la que llega: {role}
 Orientación para esta práctica: {role_guidance}
 Regla de lectura del texto: {text_origin}
 {purpose_guidance}
+{sports_context_guidance}
 Situación o mensaje de la persona:
 ---
 {situation}
