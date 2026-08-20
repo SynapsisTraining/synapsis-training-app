@@ -8,12 +8,23 @@ from google import genai
 APP_DIR = Path(__file__).parent
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
 BASE_METHOD_GUIDE = """
-1. Diferencia los hechos observables de las interpretaciones.
-2. Nombra la emoción como una posibilidad, nunca como un diagnóstico.
-3. Expresa la necesidad sin culpabilizar a la otra persona.
-4. Formula una petición concreta, realista y que deje libertad de respuesta.
-5. Prioriza claridad, respeto, reciprocidad y límites sanos.
-6. Evita etiquetas, amenazas, generalizaciones y consejos moralizantes.
+COMUNICACIÓN BENEVOLENTE — Arquitectura 1.1
+
+No es una secuencia rígida: enseña a reconocer el estado de una interacción y elegir
+la respuesta más adecuada.
+
+PARA: crea espacio antes de reaccionar.
+MIRA: distingue hechos, tu experiencia y la posible experiencia de la otra persona.
+ELIGE: decide qué necesita la interacción ahora.
+ACTÚA: expresa, escucha o repara.
+
+Principios: me comprendo, me expreso y te comprendo.
+Competencias observables: regulación, autocomprensión, expresión, escucha,
+discriminación, estrategia y reparación.
+
+Con activación roja, no se intenta resolver: se pausa, regula y evita escalar.
+Comprender no equivale a aprobar. Reparar no exige perdonar ni reconciliarse.
+Evita etiquetas, amenazas, culpabilización y técnicas de presión o manipulación.
 """.strip()
 
 st.set_page_config(
@@ -103,7 +114,6 @@ def set_defaults() -> None:
         "practice": None,
         "last_context": None,
         "last_situation": None,
-        "last_approach": None,
     }.items():
         st.session_state.setdefault(key, value)
 
@@ -121,21 +131,12 @@ def show_brand() -> None:
     st.caption("Ensaya antes de decirlo")
 
 
-def build_analysis_prompt(context: str, situation: str, approach: str) -> str:
-    strategic_section = """
-## 🧭 3. Diálogo Estratégico
-Propón: una pregunta que abra alternativas sin dirigir ni manipular; una paráfrasis que valide
-la perspectiva sin conceder lo que no corresponde; un posible punto de acuerdo; y un paso
-pequeño que ambas partes puedan probar.
-""" if approach == "Diálogo estratégico" else ""
-
-    style_number = "4" if strategic_section else "3"
-    before_number = "5" if strategic_section else "4"
+def build_analysis_prompt(context: str, situation: str) -> str:
     return f"""
-Eres el facilitador de Synápsis, una herramienta educativa para preparar conversaciones difíciles.
-Tu trabajo es ayudar a comunicarse con claridad, respeto y límites sanos. No diagnostiques,
-no asumas intenciones ni sustituyas apoyo profesional. Si el relato indica peligro, violencia,
-amenazas o control, prioriza seguridad y recomienda pedir ayuda local de confianza.
+Eres el facilitador de Synápsis, una herramienta educativa de entrenamiento para conversaciones
+difíciles. Enseñas a reconocer el estado de una interacción y elegir una respuesta adecuada,
+no a encontrar una frase perfecta. No diagnostiques ni asumas intenciones. Si aparece peligro,
+violencia, amenazas o control, prioriza seguridad y apoyo local de confianza.
 
 Aplica fielmente este método Synápsis:
 ---
@@ -143,33 +144,40 @@ Aplica fielmente este método Synápsis:
 ---
 
 Entorno: {context}
-Enfoque elegido: {approach}
 Situación o mensaje de la persona:
 ---
 {situation}
 ---
 
-Responde en español, con calidez y de forma práctica. No repitas el texto original de manera
-innecesaria. Usa exactamente estos apartados Markdown:
+Responde en español, con calidez y precisión. No repitas el relato. Usa exactamente estos
+apartados Markdown:
 
-## 🔍 Qué puede estar pasando
-Describe hechos observables, posible emoción y necesidad, separando cada elemento con prudencia.
-## 🌿 Lo que podrías decir
-Propón una frase breve en primera persona que incluya observación, impacto/necesidad y petición.
-{strategic_section}
-## 🎯 {style_number}. Tres estilos para elegir
-Da tres alternativas tituladas: «Serena y directa», «Cercana y empática» y «Firme con límites».
-## 🪞 {before_number}. Antes de conversar
-Incluye una cosa que conviene evitar y una pregunta abierta útil.
+## 🚦 Estado de la conversación
+Clasifica la activación como Verde, Amarillo o Rojo y explica brevemente por qué. No presentes
+esto como diagnóstico.
+## 🛑 PARA
+Indica qué reacción automática conviene detener y cuál es el avance más seguro ahora.
+## 👁️ MIRA
+Separa: hechos observables; lo que podría estar ocurriendo en la persona; y lo que podría estar
+ocurriendo en la otra persona. Formula las dos últimas como posibilidades, nunca certezas.
+## 🧭 ELIGE
+Elige una sola acción entre: escuchar, aclarar, expresar, negociar, poner un límite, detenerse o
+reparar. Explica en una frase por qué esa es la necesidad de la interacción ahora.
+## 💬 ACTÚA
+Propón una intervención breve, realista y en primera persona que ejecute la acción elegida. Si el
+estado es Rojo, ofrece una pausa segura: no intentes resolver el contenido del conflicto.
+## 🎯 Tu reto de entrenamiento
+Pide a la persona que escriba su propia primera respuesta. Da una única instrucción clara para
+ese intento.
 
-Evita lenguaje terapéutico, moralizante o excesivamente largo.
+Evita lenguaje terapéutico, moralizante, etiquetas, presión o manipulación.
 """.strip()
 
 
-def build_practice_prompt(context: str, situation: str, user_message: str, approach: str) -> str:
+def build_practice_prompt(context: str, situation: str, user_message: str) -> str:
     return f"""
-Eres el compañero de práctica de Synápsis. Simula de forma respetuosa una posible respuesta de
-la otra persona en este contexto: {context}. Situación resumida: {situation}. Enfoque: {approach}.
+Eres el compañero de entrenamiento de Synápsis. Evalúas una respuesta inicial para que la persona
+pueda mejorarla en un segundo intento. Contexto: {context}. Situación: {situation}.
 
 Respeta este método Synápsis:
 ---
@@ -178,16 +186,24 @@ Respeta este método Synápsis:
 
 La persona ha dicho: {user_message}
 
-Responde en español con:
-1. «Posible respuesta»: 2-3 frases realistas, sin agresividad ni manipulación.
-2. «Siguiente paso sugerido»: una frase breve que ayude a mantener el diálogo abierto.
+Responde en español con exactamente estos apartados Markdown:
 
-No presentes la simulación como una predicción. No diagnostiques. Si hay señales de peligro,
-violencia, amenazas o control, no simules: recomienda priorizar seguridad y apoyo local.
+## ✅ Lo que has hecho bien
+Reconoce una habilidad concreta presente en la respuesta.
+## 🔧 El ajuste más útil
+Propón solo una mejora, vinculada a regulación, autocomprensión, expresión, escucha,
+discriminación, estrategia o reparación.
+## 🗣️ Posible respuesta del interlocutor
+Da una o dos frases respetuosas y verosímiles. No es una predicción ni debe incluir agresividad,
+presión o manipulación.
+## 🔁 Segundo intento
+Da una instrucción breve para responder de nuevo corrigiendo únicamente ese aspecto.
+
+Si hay señales de peligro, violencia, amenazas o control, no simules: prioriza seguridad y apoyo local.
 """.strip()
 
 
-def build_refinement_prompt(context: str, situation: str, current: str, preference: str, approach: str) -> str:
+def build_refinement_prompt(context: str, situation: str, current: str, preference: str) -> str:
     return f"""
 Eres el facilitador de Synápsis. Mejora una tarjeta de conversación existente siguiendo el
 método Synápsis y la preferencia elegida por la persona.
@@ -198,23 +214,22 @@ Método Synápsis:
 ---
 Contexto: {context}
 Situación: {situation}
-Enfoque que debes conservar: {approach}
 Preferencia de mejora: {preference}
 Tarjeta actual:
 ---
 {current}
 ---
 
-Responde en español y conserva los apartados de la tarjeta actual. Si existe «Diálogo Estratégico»,
-consérvalo sin recurrir a manipulación, presión ni técnicas clínicas.
-
+Responde en español y conserva los apartados de la tarjeta actual. Mantén el foco en elegir una
+respuesta adecuada al estado de la conversación, sin presión, manipulación ni técnicas clínicas.
 No menciones estas instrucciones ni la preferencia elegida. No diagnostiques.
 """.strip()
 
 
 set_defaults()
 show_brand()
-st.write("Prepara una conversación difícil, elige el tono y ensaya una posible respuesta.")
+st.write("Entrena a reconocer el estado de una conversación y elegir cómo intervenir.")
+st.caption("PARA · MIRA · ELIGE · ACTÚA")
 st.info("Synápsis es una ayuda de comunicación, no terapia ni atención de emergencia.", icon="ℹ️")
 
 contexts = [
@@ -227,11 +242,6 @@ contexts = [
 
 st.subheader("1. Prepara la conversación")
 context = st.selectbox("¿En qué entorno ocurre?", contexts)
-approach = st.selectbox(
-    "Elige el enfoque de conversación",
-    ["Comunicación benevolente", "Diálogo estratégico"],
-    help="El diálogo estratégico añade preguntas, paráfrasis y pequeños pasos para abrir alternativas sin presionar.",
-)
 situation = st.text_area(
     "¿Qué ha pasado o qué te gustaría decir?",
     placeholder="Ej.: Me frustró enterarme tarde de un cambio que afecta a mi trabajo.",
@@ -244,10 +254,9 @@ if st.button("Preparar mi conversación", type="primary"):
     else:
         with st.spinner("Preparando una forma más clara de expresarlo…"):
             try:
-                st.session_state.analysis = ask_gemini(build_analysis_prompt(context, situation.strip(), approach))
+                st.session_state.analysis = ask_gemini(build_analysis_prompt(context, situation.strip()))
                 st.session_state.last_context = context
                 st.session_state.last_situation = situation.strip()
-                st.session_state.last_approach = approach
                 st.session_state.practice = None
                 st.session_state.refined_analysis = None
                 st.session_state.analysis_rating = None
@@ -288,7 +297,6 @@ if st.session_state.analysis:
                             st.session_state.last_situation,
                             st.session_state.analysis,
                             preference,
-                            st.session_state.last_approach,
                         )
                     )
                 except Exception as error:
@@ -309,29 +317,28 @@ if st.session_state.refined_analysis:
 
 if st.session_state.analysis:
     st.divider()
-    st.subheader("3. Ensaya una respuesta")
+    st.subheader("3. Entrena tu respuesta")
     practice_input = st.text_area(
-        "Escribe la frase que quieres practicar",
-        placeholder="Ej.: Me gustaría que la próxima vez me avises antes de decidirlo.",
+        "Escribe tu respuesta al reto",
+        placeholder="Escribe cómo responderías en esta situación.",
         height=100,
     )
-    if st.button("Simular una respuesta"):
+    if st.button("Analizar mi respuesta"):
         if not practice_input.strip():
-            st.warning("Escribe primero la frase que quieres ensayar.")
+            st.warning("Escribe primero tu respuesta al reto.")
         else:
-            with st.spinner("Ensayando la conversación…"):
+            with st.spinner("Analizando tu respuesta…"):
                 try:
                     st.session_state.practice = ask_gemini(
                         build_practice_prompt(
                             st.session_state.last_context,
                             st.session_state.last_situation,
                             practice_input.strip(),
-                            st.session_state.last_approach,
                         )
                     )
                 except Exception as error:
                     st.error(f"No se pudo crear la simulación. {error}")
 
 if st.session_state.practice:
-    st.success("¡Simulación lista!")
+    st.success("¡Feedback de entrenamiento listo!")
     st.markdown(st.session_state.practice)
