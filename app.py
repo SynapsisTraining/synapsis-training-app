@@ -361,8 +361,13 @@ role = st.selectbox(
     help="La propuesta se adaptará a si necesitas hablar tú o si necesitas comprender a la otra persona.",
 )
 expression_purpose = ""
+situation = st.text_area(
+    "¿Qué ha pasado o qué te gustaría abordar?",
+    placeholder="Ej.: Me frustró enterarme tarde de un cambio que afecta a mi trabajo.",
+    height=140,
+)
 if role == "Quiero expresar algo":
-    st.markdown("#### Antes de expresarte: ¿qué esperas conseguir?")
+    st.markdown("#### Después de escribirlo: ¿qué esperas conseguir?")
     st.caption("Estas tres preguntas son opcionales; sirven para orientar tu propuesta con más claridad.")
     purpose_understanding = st.text_input(
         "1. ¿Qué te gustaría que la otra persona comprendiera?",
@@ -382,11 +387,6 @@ if role == "Quiero expresar algo":
         f"2. Siguiente paso: {purpose_next_step or 'Sin respuesta.'}\n"
         f"3. Lo que quiero cuidar: {purpose_care or 'Sin respuesta.'}"
     )
-situation = st.text_area(
-    "¿Qué ha pasado o qué te gustaría abordar?",
-    placeholder="Ej.: Me frustró enterarme tarde de un cambio que afecta a mi trabajo.",
-    height=140,
-)
 
 if st.button("Preparar mi conversación", type="primary"):
     if not situation.strip():
