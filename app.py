@@ -236,13 +236,15 @@ una posible expresión de impotencia o de poner todo el peso fuera de uno mismo,
 la persona. Entiende «declinación de responsabilidad» como evitar reconocer la propia parte de elección
 o contribución, no como obligar a asumir culpas ajenas.
 
-## 🌿 Tres alternativas más benevolentes
-Si alguna de esas señales está presente o es posible, ofrece **al menos tres** versiones alternativas
-que mantengan el asunto importante, el límite o la petición, pero reduzcan la agresividad. Titúlalas
-«1. Serena y directa», «2. Cercana y empática» y «3. Firme con límites». No las presentes como frases
-mágicas: explica en una línea qué cambia cada una. Si no detectas señales, omite también el apartado
-«Señales en mi expresión», indica brevemente que no es necesario reformularla y no inventes un
-problema. En las alternativas usa de forma natural, repartidos entre ellas, estos términos:
+## 🌿 Alternativas más benevolentes
+Si alguna de esas señales está presente o es posible, ofrece **cuatro** versiones alternativas que
+mantengan el asunto importante, el límite o la petición, pero reduzcan la agresividad. Titúlalas
+«1. Serena y directa», «2. Cercana y empática», «3. Firme con límites» y «4. Consecuencias y
+reparación». En la cuarta nombra, sin dramatizar, las posibles consecuencias observables de la
+conducta o de mantener la situación y abre un paso concreto de reparación o mejora. No presentes las
+alternativas como frases mágicas: explica en una línea qué cambia cada una. Si no detectas señales,
+omite también el apartado «Señales en mi expresión», indica brevemente que no es necesario reformularla
+y no inventes un problema. En las alternativas usa de forma natural, repartidos entre ellas, estos términos:
 «entiendo», «comprendo», «observo», «deseo», «respeto», «ofrezco», «me comprometo» y «mejorar».
 Mantén el sentido del mensaje: no uses esas palabras solo como adorno ni elimines un límite legítimo."""
         if role == "Quiero expresar algo"
