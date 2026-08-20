@@ -409,18 +409,18 @@ if role == "Quiero expresar algo":
         key="purpose_understanding",
     )
     purpose_next_step = st.text_input(
-        "2. ¿Qué cambio, decisión o siguiente paso te gustaría abrir?",
+        "2. ¿Qué es lo que deseas?",
         key="purpose_next_step",
     )
     purpose_care = st.text_input(
-        "3. ¿Qué quieres cuidar al decirlo?",
-        placeholder="Por ejemplo: el respeto, la relación, un límite o la confianza.",
+        "3. ¿Qué expectativas tienes?",
+        placeholder="Por ejemplo: sobre la conversación, el vínculo o un siguiente paso.",
         key="purpose_care",
     )
     expression_purpose = (
         f"1. Que comprenda: {purpose_understanding or 'Sin respuesta.'}\n"
-        f"2. Siguiente paso: {purpose_next_step or 'Sin respuesta.'}\n"
-        f"3. Lo que quiero cuidar: {purpose_care or 'Sin respuesta.'}"
+        f"2. Lo que deseo: {purpose_next_step or 'Sin respuesta.'}\n"
+        f"3. Mis expectativas: {purpose_care or 'Sin respuesta.'}"
     )
 
 if st.button("Preparar mi conversación", type="primary"):
