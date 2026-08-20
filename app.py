@@ -275,14 +275,14 @@ Evita lenguaje terapéutico, moralizante, etiquetas, presión o manipulación.
 
 def build_practice_prompt(context: str, situation: str, role: str) -> str:
     role_guidance = (
-        "Las tres intervenciones deben ayudar a expresar con claridad, sin perder escucha ni respeto."
+        "Las seis fases deben ayudar a expresar con claridad, sin perder escucha ni respeto."
         if role == "Quiero expresar algo"
-        else "Las tres intervenciones deben ayudar a escuchar y comprender primero, sin asumir ni interrogar."
+        else "Las seis fases deben ayudar a escuchar y comprender primero, sin asumir ni interrogar."
     )
     return f"""
-Eres el facilitador de Synápsis. Diseña un diálogo estratégico breve de tres intervenciones de la
-persona y tres posibles réplicas del interlocutor. Su función es abrir alternativas y avanzar con
-claridad, nunca convencer, presionar ni manipular. Contexto: {context}. Situación: {situation}.
+Eres el facilitador de Synápsis. Diseña un diálogo estratégico breve de seis fases, con una
+intervención de la persona y una posible réplica del interlocutor en cada fase. Su función es abrir
+alternativas y avanzar con claridad, nunca convencer, presionar ni manipular. Contexto: {context}. Situación: {situation}.
 Posición de la persona: {role}. {role_guidance}
 
 {FUNDAMENTAL_PRINCIPLE}
@@ -304,6 +304,23 @@ Explica en una frase qué avance pequeño y realista se busca.
 **La otra persona podría responder:** una réplica verosímil.
 ## 3. Proponer un siguiente paso
 **Tú:** una propuesta concreta, libre de presión, o un límite respetuoso si corresponde.
+**La otra persona podría responder:** una réplica verosímil.
+## 4. Simplificar para avanzar — principios de diseño de Maeda
+**Tú:** reduce el asunto a una sola cuestión importante, organiza lo esencial y formula una pregunta
+o propuesta sencilla. Evita añadir detalles, reproches o soluciones múltiples; la simplicidad debe
+dar claridad, no ocultar lo importante.
+**La otra persona podría responder:** una réplica verosímil.
+## 5. Conectar desde la persona — psicología humanista de Rogers
+**Tú:** muestra empatía, congruencia y respeto incondicional por la persona sin aprobar una conducta
+dañina. Nombra de manera prudente lo que parece importante para ella y expresa tu posición con
+autenticidad.
+**La otra persona podría responder:** una réplica verosímil.
+## 6. Desescalar antes de resolver — Doug Noll
+**Tú:** si hay intensidad, deja de discutir el contenido por un momento y refleja la emoción posible
+en una frase breve de segunda persona, sin diagnosticar ni decir que sabes lo que siente (por ejemplo:
+«Parece que esto te ha hecho sentir muy frustrado»). Después ofrece una pausa o una pregunta que
+reduzca la tensión. Si no hay intensidad, usa esta fase para prevenir la escalada con una validación
+breve y volver al propósito.
 **La otra persona podría responder:** una réplica verosímil.
 ## 🧭 Clave para conducirlo
 Da una sola indicación breve sobre qué actitud sostener durante el diálogo.
@@ -447,8 +464,8 @@ if st.session_state.refined_analysis:
 
 if st.session_state.analysis:
     st.divider()
-    st.subheader("3. Diálogo estratégico: tres intervenciones")
-    st.caption("Recibirás tres intervenciones tuyas y tres posibles respuestas para ensayar el avance de la conversación.")
+    st.subheader("3. Diálogo estratégico: seis fases")
+    st.caption("Recibirás seis intervenciones tuyas y seis posibles respuestas para ensayar el avance de la conversación.")
     if st.button("Preparar el diálogo estratégico"):
         with st.spinner("Preparando el diálogo estratégico…"):
             try:
