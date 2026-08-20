@@ -1,5 +1,8 @@
 import os
+import json
 from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 import streamlit as st
 from google import genai
@@ -7,6 +10,7 @@ from google import genai
 
 APP_DIR = Path(__file__).parent
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
+FORMSPREE_FEEDBACK_ENDPOINT = "https://formspree.io/f/xoeaybvv"
 FUNDAMENTAL_PRINCIPLE = """
 Principio fundamental e irrenunciable: una cosa es lo que sucede —el hecho observable, las palabras
 concretas o la conducta verificable— y otra distinta es lo que una persona interpreta, supone o
@@ -120,10 +124,30 @@ def ask_gemini(instruction: str) -> str:
     return answer
 
 
+def send_feedback(vote: str) -> None:
+    """Envía solo la valoración, nunca el contenido de la conversación."""
+    payload = json.dumps(
+        {"valoracion": vote, "origen": "Synápsis Training"}
+    ).encode("utf-8")
+    request = Request(
+        FORMSPREE_FEEDBACK_ENDPOINT,
+        data=payload,
+        headers={"Accept": "application/json", "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urlopen(request, timeout=10) as response:
+            if not 200 <= response.status < 300:
+                raise RuntimeError("Formspree no aceptó la valoración.")
+    except (HTTPError, URLError, TimeoutError) as error:
+        raise RuntimeError("No se pudo enviar la valoración. Inténtalo de nuevo.") from error
+
+
 def set_defaults() -> None:
     for key, value in {
         "analysis": None,
         "analysis_rating": None,
+        "feedback_delivery": None,
         "refined_analysis": None,
         "practice": None,
         "last_context": None,
@@ -519,14 +543,28 @@ if st.session_state.analysis:
     rating = st.session_state.analysis_rating
     helpful_col, improve_col = st.columns(2)
     if helpful_col.button("👍 Me ha servido", key="helpful_feedback", disabled=rating is not None):
-        st.session_state.analysis_rating = 1
-        rating = 1
+        try:
+            send_feedback("Sí, me ha servido")
+            st.session_state.analysis_rating = 1
+            st.session_state.feedback_delivery = "enviada"
+            rating = 1
+        except RuntimeError as error:
+            st.error(str(error))
     if improve_col.button("👎 Necesito otro enfoque", key="improve_feedback", disabled=rating is not None):
-        st.session_state.analysis_rating = 0
-        rating = 0
+        try:
+            send_feedback("No, necesito otro enfoque")
+            st.session_state.analysis_rating = 0
+            st.session_state.feedback_delivery = "enviada"
+            rating = 0
+        except RuntimeError as error:
+            st.error(str(error))
 
     if rating is not None:
-        feedback_message = "Gracias por indicarlo." if rating == 1 else "Gracias por indicarlo: puedes ajustar la tarjeta o preparar otra conversación."
+        feedback_message = (
+            "Gracias por indicarlo."
+            if rating == 1
+            else "Gracias por indicarlo: puedes ajustar la tarjeta o preparar otra conversación."
+        )
         st.caption(feedback_message)
 
     st.download_button(
