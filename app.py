@@ -170,13 +170,21 @@ la tensión descritos, y la activación Verde, Amarillo o Rojo como orientación
 información, dilo y formula una pregunta abierta útil."""
     )
     benevolent_alternatives = (
-        """## 🌿 Tres alternativas más benevolentes
-Evalúa si la formulación puede vivirse como acusación, descalificación, presión, amenaza, exigencia
-o cierre del diálogo. Si es así, ofrece **al menos tres** versiones alternativas que mantengan el
-asunto importante, el límite o la petición, pero reduzcan la agresividad. Titúlalas «1. Serena y
-directa», «2. Cercana y empática» y «3. Firme con límites». No las presentes como frases mágicas:
-explica en una línea qué cambia cada una. Si la formulación ya es clara y benevolente, indica
-brevemente que no es necesario reformularla y no inventes un problema."""
+        """## 🔎 Señales en mi expresión
+Revisa la formulación en cinco dimensiones: **acusación**, **victimismo**, **declinación de
+responsabilidad**, **reproche** y **falta de intención de mejora**. Para cada una indica «presente»,
+«posible» o «no observable» y ofrece una justificación muy breve basada en palabras concretas del
+texto. Entiende «victimismo» solo como una posible expresión de impotencia o de poner todo el peso
+fuera de uno mismo, nunca como etiqueta de la persona. Entiende «declinación de responsabilidad» como
+evitar reconocer la propia parte de elección o contribución, no como obligar a asumir culpas ajenas.
+
+## 🌿 Tres alternativas más benevolentes
+Si alguna de esas señales está presente o es posible, ofrece **al menos tres** versiones alternativas
+que mantengan el asunto importante, el límite o la petición, pero reduzcan la agresividad. Titúlalas
+«1. Serena y directa», «2. Cercana y empática» y «3. Firme con límites». No las presentes como frases
+mágicas: explica en una línea qué cambia cada una. Si todas las señales son «no observable» y la
+formulación ya es clara y benevolente, indica brevemente que no es necesario reformularla y no
+inventes un problema."""
         if role == "Quiero expresar algo"
         else ""
     )
