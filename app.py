@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import requests
 import streamlit as st
 from google import genai
 
@@ -104,6 +105,27 @@ def ask_gemini(instruction: str) -> str:
     if not answer:
         raise RuntimeError("Gemini no devolvió texto. Inténtalo de nuevo en unos segundos.")
     return answer
+
+
+def record_feedback(vote: str) -> None:
+    """Registra únicamente un voto anónimo en Supabase; nunca el texto de la conversación."""
+    supabase_url = secret_or_env("SUPABASE_URL")
+    supabase_key = secret_or_env("SUPABASE_ANON_KEY")
+    if not supabase_url or not supabase_key:
+        raise ValueError("El contador de valoraciones aún no está configurado.")
+
+    response = requests.post(
+        f"{supabase_url.rstrip('/')}/rest/v1/rpc/record_feedback",
+        headers={
+            "apikey": supabase_key,
+            "Authorization": f"Bearer {supabase_key}",
+            "Content-Type": "application/json",
+        },
+        json={"p_vote": vote},
+        timeout=10,
+    )
+    if not response.ok:
+        raise RuntimeError("No se pudo guardar la valoración anónima.")
 
 
 def set_defaults() -> None:
@@ -360,14 +382,24 @@ if st.session_state.practice:
 if st.session_state.analysis:
     st.divider()
     st.markdown("#### ¿Te ha servido esta propuesta?")
-    st.caption("Tu conversación y tu valoración no se guardan ni se envían: se eliminan al recargar la página.")
-    helpful_col, improve_col = st.columns(2)
-    if helpful_col.button("👍 Me ha servido", key="helpful_feedback"):
-        st.session_state.analysis_rating = 1
-    if improve_col.button("👎 Necesito otro enfoque", key="improve_feedback"):
-        st.session_state.analysis_rating = 0
-
+    st.caption("Tu conversación no se guarda ni se envía. Solo se suma de forma anónima tu valoración, sin texto ni datos personales.")
     rating = st.session_state.analysis_rating
+    helpful_col, improve_col = st.columns(2)
+    if helpful_col.button("👍 Me ha servido", key="helpful_feedback", disabled=rating is not None):
+        try:
+            record_feedback("helpful")
+            st.session_state.analysis_rating = 1
+            rating = 1
+        except Exception as error:
+            st.error(f"No se pudo registrar la valoración. {error}")
+    if improve_col.button("👎 Necesito otro enfoque", key="improve_feedback", disabled=rating is not None):
+        try:
+            record_feedback("improve")
+            st.session_state.analysis_rating = 0
+            rating = 0
+        except Exception as error:
+            st.error(f"No se pudo registrar la valoración. {error}")
+
     if rating is not None:
         feedback_message = "Gracias por indicarlo." if rating == 1 else "Gracias por indicarlo: puedes ajustar la tarjeta o preparar otra conversación."
         st.caption(feedback_message)
