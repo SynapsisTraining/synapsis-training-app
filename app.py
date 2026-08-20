@@ -180,6 +180,10 @@ reparar. Explica en una frase por qué esa es la necesidad de la interacción ah
 ## 💬 ACTÚA
 Propón una intervención breve, realista y en primera persona que ejecute la acción elegida. Si el
 estado es Rojo, ofrece una pausa segura: no intentes resolver el contenido del conflicto.
+## 💳 Tarjeta de conversación
+Reúne una propuesta breve y usable para esta situación: una frase de inicio, una pregunta abierta
+o escucha útil cuando corresponda, y un posible siguiente paso. Mantén claridad, respeto y límites
+sanos; adapta la tarjeta a la posición desde la que llega la persona.
 ## 🎯 Tu reto de entrenamiento
 Formula un reto breve que distinga claramente tres tiempos:
 - **Pasado:** qué hecho conviene reconocer sin intentar cambiarlo.
@@ -299,8 +303,10 @@ if st.button("Preparar mi conversación", type="primary"):
 
 if st.session_state.analysis:
     st.divider()
-    st.subheader("2. Tu tarjeta de conversación")
+    st.subheader("2. Radiografía emocional")
     st.success("¡Tu análisis está listo! Léelo a continuación y, si quieres, ensaya una respuesta al final.")
+    st.markdown(st.session_state.analysis)
+
     with st.container(border=True):
         st.markdown("#### Ajusta tu tarjeta")
         st.caption("Elige el cambio que quieres aplicar y te propondré una versión alternativa.")
@@ -324,7 +330,6 @@ if st.session_state.analysis:
                 except Exception as error:
                     st.error(f"No se pudo ajustar la tarjeta. {error}")
 
-    st.markdown(st.session_state.analysis)
     st.download_button(
         "Descargar mi tarjeta (Markdown)",
         data=st.session_state.analysis,
