@@ -33,6 +33,10 @@ st.markdown(
         line-height: 1.65;
       }
       .stMarkdown strong { color: #11191C !important; }
+      [data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] label,
+      [data-testid="stWidgetLabel"] span, div[role="radiogroup"] label {
+        color: #20272A !important;
+      }
       ::selection { background: #CDE8D4; color: #163321; }
       ::-moz-selection { background: #CDE8D4; color: #163321; }
       .stButton > button, .stDownloadButton > button {
@@ -223,8 +227,8 @@ contexts = [
 
 st.subheader("1. Prepara la conversación")
 context = st.selectbox("¿En qué entorno ocurre?", contexts)
-approach = st.radio(
-    "¿Qué enfoque prefieres?",
+approach = st.selectbox(
+    "Elige el enfoque de conversación",
     ["Comunicación benevolente", "Diálogo estratégico"],
     help="El diálogo estratégico añade preguntas, paráfrasis y pequeños pasos para abrir alternativas sin presionar.",
 )
