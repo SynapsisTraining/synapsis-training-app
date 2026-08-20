@@ -285,6 +285,17 @@ Formula un reto breve que distinga claramente tres tiempos:
 - **Futuro:** qué paso concreto puede nacer de esa decisión presente.
 Recuerda en una frase que el pasado no se puede cambiar y que el futuro será fruto de lo que se
 decida en el presente. Pide después una primera respuesta propia con una única instrucción clara.
+## 🌱 Aprende por contraste
+Propón exactamente **dos** mini-ejemplos, adaptados al entorno, la posición desde la que llega la
+persona, el texto y el nivel de tensión. Para cada ejemplo escribe:
+- **Diálogo nocivo:** una intervención breve y verosímil que podría aumentar el conflicto (sin
+  reproducir insultos extremos, amenazas ni humillaciones).
+- **Alternativa benevolente:** una versión que conserve el asunto importante y aplique observación,
+  expresión responsable, escucha o petición libre de presión, según corresponda.
+- **Qué cambia:** una sola frase que señale la diferencia entre el hecho, la interpretación y la
+  forma de responder.
+No uses ejemplos genéricos ni fijos; deben corresponder a esta situación. Si existe activación Roja,
+la alternativa benevolente debe priorizar una pausa segura antes de abordar el contenido.
 
 Evita lenguaje terapéutico, moralizante, etiquetas, presión o manipulación.
 """.strip()
