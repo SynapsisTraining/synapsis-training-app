@@ -43,6 +43,21 @@ st.markdown(
         background: #4A7C59; color: white;
       }
       div[data-testid="stAlert"] { border-radius: 10px; }
+      @media (max-width: 640px) {
+        .block-container { padding: 1.25rem 1rem 2.5rem; }
+        h1 { font-size: 1.7rem !important; line-height: 1.2; }
+        h2 { font-size: 1.35rem !important; }
+        h3 { font-size: 1.2rem !important; }
+        .stMarkdown, .stMarkdown p, .stMarkdown li {
+          font-size: 1rem;
+          line-height: 1.6;
+        }
+        .stButton > button, .stDownloadButton > button {
+          min-height: 3.1rem;
+          font-size: 1rem;
+        }
+        textarea, input, [data-baseweb="select"] input { font-size: 16px !important; }
+      }
     </style>
     """,
     unsafe_allow_html=True,
